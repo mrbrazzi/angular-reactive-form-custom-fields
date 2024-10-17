@@ -1,0 +1,25 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Option</mat-label>
+    <mat-select formControlName="option">
+      <mat-option *ngFor="let option of options" [value]="option.value">
+        {{ option.label }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('option')?.hasError('required')">Please select an option</mat-error>
+    <mat-error *ngIf="form.get('option')?.hasError('min')">Please select a valid option</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Values</mat-label>
+    <ng-container *ngIf="getInputType() !== 'textarea'; else textareaTemplate">
+      <input matInput formControlName="values" [placeholder]="getPlaceholder()" [type]="getInputType()">
+    </ng-container>
+    <ng-template #textareaTemplate>
+      <textarea matInput formControlName="values" [placeholder]="getPlaceholder()"></textarea>
+    </ng-template>
+    <mat-error *ngIf="form.get('values')?.invalid">{{ getErrorMessage() }}</mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Submit</button>
+</form>
